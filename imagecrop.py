@@ -13,7 +13,7 @@ import time
 
 
 # Selecting the image to pass through
-image = cv.resize(cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\two.jpeg',-1), (1280, 720))
+image = cv.resize(cv.imread(r'two.jpeg',-1), (1280, 720))
 #@image = cv.resize(cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\nocars.jpeg',-1), (1280, 720))
 #image = cv.resize(cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\leftspot.jpeg',-1), (1280, 720))
 #image = cv.resize(cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\rightspot.jpeg',-1), (1280, 720))
