@@ -4,6 +4,10 @@ import cv2 as cv
 import numpy as np
 import time
 
+import firebase_admin
+from firebase_admin import credentials 
+from firebase_admin import db
+
 
 # Coordinates for each spot
 #spot_1 = ParkingSpot((312,474,537,472,476,538,122,546)
@@ -13,7 +17,7 @@ import time
 
 
 # Selecting the image to pass through
-image = cv.resize(cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\two.jpeg',-1), (1280, 720))
+image = cv.resize(cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\left.jpeg',-1), (1280, 720))
 #@image = cv.resize(cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\nocars.jpeg',-1), (1280, 720))
 #image = cv.resize(cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\leftspot.jpeg',-1), (1280, 720))
 #image = cv.resize(cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\rightspot.jpeg',-1), (1280, 720))
@@ -125,6 +129,27 @@ if (count3<1000):
     cv.putText(image, 'Open', (900,317),cv.FONT_HERSHEY_COMPLEX,1,(0,255,0),2,cv.LINE_AA)
     
     
+    
+#fetch the service account key JSON file contents 
+cred = credentials.Certificate('ServiceAccountKey.json')
+
+firebase_admin.initialize_app(cred, {
+'databaseURL': 'https://fir-knob4ugo-default-rtdb.firebaseio.com/'
+})
+
+
+    # save data 
+ref = db.reference('Parking Location: Outside of AU Pharmacy/')
+users_ref = ref.child('parking')
+users_ref.set({
+
+            "Spot 1 Status" : Spot1Status,
+            "Spot 2 Status" : Spot2Status,
+            "Spot 3 Status" : Spot3Status
+             })
+
+
+# handle = db.reference('py/users/Parking Location: Outside of AU Pharmacy')
         
 
 
@@ -144,3 +169,4 @@ while(1):
     if k == ord('q'):
         break
 cv.destroyAllWindows()
+  
