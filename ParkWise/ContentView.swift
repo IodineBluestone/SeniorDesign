@@ -8,15 +8,17 @@
 import SwiftUI
 
 extension Color {
-    static let navy = Color(red: 0, green: 0, blue: 128/255)
+    static let navy = Color(red: 0, green: 0, blue: 199/255)
 }
 
 struct ContentView: View {
-    @State private var spot_one = false
-    @State private var spot_two = false
-    @State private var spot_three = false
-    let spotOne = CarSpot(spotOpen: false,spotNumber: 20)
-    let navy = Color(red: 0, green: 0, blue: 128/255)
+    @State private var selectedLot = "Pharmacy Lot"
+    let lotNames = ["Pharmacy Lot", "Northern Lot", "Rec Lot", "Arena Lot"]
+    var spotOne = CarSpot(spotOpen: false,spotNumber: 20)
+    var spotTwo = CarSpot(spotOpen: false,spotNumber: 20)
+    var spotThree = CarSpot(spotOpen: false,spotNumber: 20)
+    @State private var pharmacyLot : [CarSpot] = []
+    
     init() {
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor( .white) ]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor( .white)]
@@ -24,6 +26,27 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
+            VStack{
+                HStack{
+                    Text("\(selectedLot)")
+                    Spacer()
+                    Menu("Select Lot"){
+                        ForEach(lotNames, id: \.self) { lotName in
+                            Button(action:{
+                                doSomething(lotName)
+                            })
+                            {
+                                Text("\(lotName)")
+                            }
+                        }
+                        
+                    }
+                }.foregroundColor(.white)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(RoundedRectangle(cornerRadius: 10).fill(.black))
+                
+                    Spacer()
                 Grid{
                     GridRow{
                         spotOne
@@ -41,39 +64,47 @@ struct ContentView: View {
                         spotOne
                     }
                 }
+                Spacer()
+                
+            }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.blue)
+            .background(Color.navy)
             .navigationTitle("ParkWise")
         }
         }
+    
+    func doSomething(_ pressedLot: String) {
+        selectedLot = pressedLot
     }
-
-struct CarSpot: View {
-    @State  var spotOpen = true
-    @State  var spotNumber = 100
-    var body: some View {
-            VStack{
-                HStack{
-                    Spacer()
-                    Text("#\(spotNumber)")
-                }
-                
-                HStack{
-                    Text(spotOpen ?" 🟢" : " 🚗")
-                        .font(.title)
+    struct CarSpot: View {
+        @State var spotOpen = true
+        @State var spotNumber = 100
+        var body: some View {
+                VStack{
+                    HStack{
+                        Spacer()
+                        Text("#\(spotNumber)")
+                    }
+                    
+                    HStack{
+                        Text(spotOpen ?" 🟢" : " 🚗")
+                            .font(.title)
+                    }
+                    .padding()
+                    HStack{
+                        Text(spotOpen ? "Open" : "Taken")
+                        Spacer()
+                    }
                 }
                 .padding()
-                HStack{
-                    Text(spotOpen ? "Open" : "Taken")
-                    Spacer()
-                }
-            }
-            .padding()
-            .background(.white)
-            .cornerRadius(10)
+                .background(.white)
+                .cornerRadius(10)
+        }
     }
-}
+    }
+
+
 
 
 struct ContentView_Previews: PreviewProvider {
