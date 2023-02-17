@@ -11,8 +11,8 @@
 		2C2637F02991863800223D68 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2637EF2991863800223D68 /* ContentView.swift */; };
 		2C2637F22991863900223D68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C2637F12991863900223D68 /* Assets.xcassets */; };
 		2C2637F52991863900223D68 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C2637F42991863900223D68 /* Preview Assets.xcassets */; };
-		2C2637FC29919E1000223D68 /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2637FB29919E1000223D68 /* SideBar.swift */; };
-		2C2637FE2992101500223D68 /* CarSpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2637FD2992101500223D68 /* CarSpot.swift */; };
+		2C3340FD299D4E00002F12F0 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3340FC299D4E00002F12F0 /* DataModel.swift */; };
+		2C3340FF299D4FCA002F12F0 /* ParkWiseColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3340FE299D4FCA002F12F0 /* ParkWiseColors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,8 +21,8 @@
 		2C2637EF2991863800223D68 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2C2637F12991863900223D68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C2637F42991863900223D68 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		2C2637FB29919E1000223D68 /* SideBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBar.swift; sourceTree = "<group>"; };
-		2C2637FD2992101500223D68 /* CarSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarSpot.swift; sourceTree = "<group>"; };
+		2C3340FC299D4E00002F12F0 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		2C3340FE299D4FCA002F12F0 /* ParkWiseColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParkWiseColors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +57,8 @@
 			children = (
 				2C2637ED2991863800223D68 /* ParkWiseApp.swift */,
 				2C2637EF2991863800223D68 /* ContentView.swift */,
-				2C2637FD2992101500223D68 /* CarSpot.swift */,
-				2C2637FB29919E1000223D68 /* SideBar.swift */,
+				2C3340FE299D4FCA002F12F0 /* ParkWiseColors.swift */,
+				2C3340FC299D4E00002F12F0 /* DataModel.swift */,
 				2C2637F12991863900223D68 /* Assets.xcassets */,
 				2C2637F32991863900223D68 /* Preview Content */,
 			);
@@ -143,10 +143,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C2637FE2992101500223D68 /* CarSpot.swift in Sources */,
 				2C2637F02991863800223D68 /* ContentView.swift in Sources */,
-				2C2637FC29919E1000223D68 /* SideBar.swift in Sources */,
 				2C2637EE2991863800223D68 /* ParkWiseApp.swift in Sources */,
+				2C3340FD299D4E00002F12F0 /* DataModel.swift in Sources */,
+				2C3340FF299D4FCA002F12F0 /* ParkWiseColors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

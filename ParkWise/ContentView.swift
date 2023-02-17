@@ -7,173 +7,186 @@
 
 import SwiftUI
 
-extension Color {
-    static let wholeBackground = Color(red: 244/255, green: 239/255, blue: 238/255)
-}
-
 struct ContentView: View {
-    @State private var selectedLotDisplay = "Pharmacy Lot"
-    @State private var selectedLot : [CarSpot] = []
-    let lotNames = ["Pharmacy Lot", "Northern Lot", "Rec Lot", "Arena Lot"]
-    var pharmacyLot : [CarSpot] =
-    [
-        CarSpot(spotOpen: false,spotNumber: 20),
-        CarSpot(spotOpen: true,spotNumber: 200),
-        CarSpot(spotOpen: false,spotNumber: 35)
-    ]
-    var northernLot : [CarSpot] =
-    [
-        CarSpot(spotOpen: false,spotNumber: 80),
-        CarSpot(spotOpen: true,spotNumber: 81),
-        CarSpot(spotOpen: false,spotNumber: 82)
-    ]
-    var recLot : [CarSpot] =
-    [
-        CarSpot(spotOpen: false,spotNumber: 10),
-        CarSpot(spotOpen: true,spotNumber: 55),
-        CarSpot(spotOpen: false,spotNumber: 44)
-    ]
-    var arenaLot : [CarSpot] =
-    [
-        CarSpot(spotOpen: false,spotNumber: 19),
-        CarSpot(spotOpen: true,spotNumber: 30),
-        CarSpot(spotOpen: false,spotNumber: 35)
-    ]
-    init() {
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor( .black) ]
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor( .black)]
-    }
-    
+    @ObservedObject var model: DataModel
     var body: some View {
         NavigationView {
-            VStack{
-                HStack{
-                    Text("\(selectedLotDisplay)")
-                    Spacer()
-                    Menu("Select Lot"){
-                        ForEach(lotNames, id: \.self) { lotName in
-                            Button(action:{
-                                doSomething(lotName)
-                            })
-                            {
-                                Text("\(lotName)")
-                            }
+            ZStack{
+                VStack(spacing:0){
+                    VStack{
+                        HStack{
+                            lotPicker(model: model)
                         }
-                        
                     }
-                }.foregroundColor(.white)
                     .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(RoundedRectangle(cornerRadius: 10).fill(.black))
-                
-                Spacer()
-                
-                ScrollView{
-                    Grid{
-                        GridRow{
-                            ForEach(0..<selectedLot.count, id: \.self) { lot in
-                                CardView(cardData: selectedLot[lot])
+                    .cornerRadius(10)
+                    ScrollView{
+                        LazyVGrid(
+                            columns: [
+                                GridItem(spacing: 4),
+                                GridItem(spacing: 4),
+                                GridItem(spacing: 4)
+                            ], spacing: 10) {
                                 
-                            }
-                        }
-                        Rectangle()
-                             .frame(maxWidth:.infinity,minHeight:30)
-                             .foregroundColor(.gray)
-                             .ignoresSafeArea()
-                      
+                                ForEach(model.selectedLot, id: \.id) { spot in
+                                    CardView(cardData: spot)
+                                }
+                                
+                            }.padding(3)
                         
-
-                        GridRow{
-                            ForEach(0..<selectedLot.count, id: \.self) { lot in
-                                CardView(cardData: selectedLot[lot])
-                                
-                            }
-                        }
-                        GridRow{
-                            ForEach(0..<selectedLot.count, id: \.self) { lot in
-                                CardView(cardData: selectedLot[lot])
-                                
-                            }
-                        }
+                        Spacer(minLength:125)
                         
-                        GridRow{
-                            ForEach(0..<selectedLot.count, id: \.self) { lot in
-                                CardView(cardData: selectedLot[lot])
-                                
-                            }
-                        }
-                        GridRow{
-                            ForEach(0..<selectedLot.count, id: \.self) { lot in
-                                CardView(cardData: selectedLot[lot])
-                            }
-                        }
                     }
+                    .background(.white)
+                    .padding(1)
                 }
-                Spacer()
-                
+                .padding(1)
+                .edgesIgnoringSafeArea(.bottom)
+                VStack{
+                    Spacer()
+                    floatingBar(model:model)
+                        .cornerRadius(40)
+                        .frame(maxHeight:70)
+                        .padding(10)
+                }
             }
-            .ignoresSafeArea()
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.wholeBackground)
+            .background(LinearGradient(gradient: Gradient(colors: [.gradientPurple, .gradientPink]), startPoint: .leading, endPoint: .trailing))
             .navigationTitle("ParkWise")
+            .toolbar {
+                Button(){
+                }label:{
+                    Image(systemName: "magnifyingglass").foregroundColor(.black).font(.headline)
+                }
+            }
+            
         }
         .onAppear(){
-            doSomething("Pharmacy Lot")
+            model.doSomething("Pharmacy Lot")
         }
     }
-    
-    func doSomething(_ pressedLot: String) {
-        selectedLotDisplay = pressedLot
-        switch pressedLot {
-        case "Pharmacy Lot":
-            selectedLot = pharmacyLot
-        case "Northern Lot":
-            selectedLot = northernLot
-        case "Rec Lot":
-            selectedLot = recLot
-        case "Arena Lot":
-            selectedLot = arenaLot
-        default:
-            selectedLot = pharmacyLot
-        }
-    }
-    
 }
-struct CarSpot {
-    var spotOpen = true
-    var spotNumber = 100
-    
-}
+
 struct CardView: View {
-    
     var cardData: CarSpot
     
     var body: some View {
         VStack{
             HStack{
-                Spacer()
                 Text("#\(cardData.spotNumber)")
             }
             
             HStack{
-                Text(cardData.spotOpen ?" 🟢" : " 🚗")
-                    .font(.title)
-            }
-            .padding()
+                if(!cardData.spotOpen) {
+                    Image("Image")
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 30))
+                }
+                else {
+                    Image(systemName: "arrow.up")
+                        .font(.largeTitle)
+                        .foregroundColor(.green)
+                }
+            }.frame(width:75,height: 75)
             HStack{
                 Text(cardData.spotOpen ? "Open" : "Taken")
-                Spacer()
             }
         }
-        .padding()
+        .padding(20)
         .background(.white)
-        .cornerRadius(10)
+        .cornerRadius(15)
+        .overlay(
+            RoundedRectangle(cornerRadius: 15)
+                .stroke(style: StrokeStyle(lineWidth: 1, dash: [4.0]))
+        )
+        
     }
 }
+
+struct lotPicker : View {
+    @ObservedObject var model: DataModel
+    var body: some View {
+        HStack{
+            Text("\(model.selectedLotDisplay)")
+            Spacer()
+            Menu {
+                ForEach(model.lotNames, id: \.self) { lotName in
+                    Button(action:{
+                        model.doSomething(lotName)
+                    })
+                    {
+                        Text("\(lotName)")
+                    }
+                }
+
+            } label: {
+                Image(systemName:"chevron.down")
+            }
+        } .foregroundColor(.black)
+            .padding()
+            .background(RoundedRectangle(cornerRadius: 10).fill(.white))
+    }
+}
+
+struct floatingBar : View {
+    @ObservedObject var model : DataModel
+    var body: some View {
+        HStack(){
+            Spacer()
+            VStack(spacing:2){
+              withAnimation(){
+                    Text("\(model.selectedLot.count)")
+                        .font(.system(size:30))
+                        .animation(.spring())
+                }
+                Text("Spaces")
+            }
+            Spacer()
+            VStack{
+                Text("\(Int(model.openSpots()))")
+                        .font(.system(size:30))
+                        .animation(.spring())
+                Text("Open")
+            }
+            Spacer()
+            progressBar(model:model, progress: (model.openSpots()/Double(model.selectedLot.count) ))
+                .animation(.spring())
+            
+            Spacer()
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 15).fill(.black))
+        .foregroundColor(.white)
+    }
+}
+
+struct progressBar : View {
+    @ObservedObject var model : DataModel
+    var progress: Double
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(
+                    Color.gradientPink.opacity(0.5),
+                    lineWidth: 7
+                )
+            Circle()
+                .trim(from: 0, to: progress)
+                .stroke(
+                    Color.gradientPink,
+                    style: StrokeStyle(
+                        lineWidth: 7,
+                        lineCap: .round
+                    )
+                )
+                .rotationEffect(.degrees(-90))
+        }
+    }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(model: DataModel())
     }
 }
 
