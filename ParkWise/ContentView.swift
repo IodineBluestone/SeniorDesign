@@ -7,11 +7,25 @@
 
 import SwiftUI
 
+
+
 struct ContentView: View {
     @ObservedObject var model: DataModel
     var body: some View {
         NavigationView {
             ZStack{
+//                                VStack{
+//                                    Text("Hello World")
+//
+//                                    Text(model.testPark.spot1 ? "True": "False")
+//                                    Text(model.testPark.spot2 ? "True": "False")
+//                                    Text(model.testPark.spot3 ? "True": "False")
+//
+//                                }
+                
+                
+
+
                 VStack(spacing:0){
                     VStack{
                         HStack{
@@ -27,15 +41,15 @@ struct ContentView: View {
                                 GridItem(spacing: 4),
                                 GridItem(spacing: 4)
                             ], spacing: 10) {
-                                
+
                                 ForEach(model.selectedLot, id: \.id) { spot in
                                     CardView(cardData: spot)
                                 }
-                                
+
                             }.padding(3)
-                        
+
                         Spacer(minLength:125)
-                        
+
                     }
                     .background(.white)
                     .padding(1)
@@ -58,11 +72,13 @@ struct ContentView: View {
                     Image(systemName: "magnifyingglass").foregroundColor(.black).font(.headline)
                 }
             }
-            
-        }
+
+                }
         .onAppear(){
             model.doSomething("Pharmacy Lot")
-        }
+            model.listentoRealtimeDatabase()
+            }
+        
     }
 }
 
@@ -186,6 +202,7 @@ struct progressBar : View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
+
         ContentView(model: DataModel())
     }
 }
