@@ -30,7 +30,7 @@ struct ContentView: View {
                                 }
                             }
                             .padding()
-                        
+                        Spacer(minLength:120)
                     }
                     .background(.white)
                 }

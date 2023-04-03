@@ -62,18 +62,25 @@ class DataModel: ObservableObject {
                     let parkingData = try JSONSerialization.data(withJSONObject: json)
                     let park = try self.decoder.decode(ParkWise.self, from: parkingData)
                     self.testPark = park
-                    self.modelLot =
-                     [
-                         CarSpot(spotOpen: park.spot1,spotNumber: 1),
-                         CarSpot(spotOpen: park.spot2,spotNumber: 2),
-                         CarSpot(spotOpen: park.spot3,spotNumber: 3),
-                         CarSpot(spotOpen: park.spot4,spotNumber: 4),
-                         CarSpot(spotOpen: park.spot5,spotNumber: 5),
-                         CarSpot(spotOpen: park.spot6,spotNumber: 6),
-                         CarSpot(spotOpen: park.spot7,spotNumber: 7),
-                         CarSpot(spotOpen: park.spot8,spotNumber: 8)
-                     ]
-                    self.selectedLot = self.modelLot
+                    if self.selectedLotDisplay == "Model Lot" {
+                        self.modelLot =
+                        [
+                            CarSpot(spotOpen: park.spot1,spotNumber: 1),
+                            CarSpot(spotOpen: park.spot2,spotNumber: 2),
+                            CarSpot(spotOpen: park.spot3,spotNumber: 3),
+                            CarSpot(spotOpen: park.spot4,spotNumber: 4),
+                            CarSpot(spotOpen: park.spot5,spotNumber: 5),
+                            CarSpot(spotOpen: park.spot6,spotNumber: 6),
+                            CarSpot(spotOpen: park.spot7,spotNumber: 7),
+                            CarSpot(spotOpen: park.spot8,spotNumber: 8),
+                            CarSpot(spotOpen: park.spot5,spotNumber: 9),
+                            CarSpot(spotOpen: park.spot6,spotNumber: 10),
+                            CarSpot(spotOpen: park.spot7,spotNumber: 11),
+                            CarSpot(spotOpen: park.spot8,spotNumber: 12)
+                            
+                        ]
+                        self.selectedLot = self.modelLot
+                    }
                 } catch {
                     print("an error occurred", error)
                 }
@@ -114,32 +121,63 @@ class DataModel: ObservableObject {
     
     var pharmacyLot : [CarSpot] =
     [
-        CarSpot(spotOpen: false,spotNumber: 35),
-        CarSpot(spotOpen: false,spotNumber: 21),
-        CarSpot(spotOpen: true,spotNumber: 201),
-        CarSpot(spotOpen: false,spotNumber: 36),
-        CarSpot(spotOpen: false,spotNumber: 22),
-        CarSpot(spotOpen: true,spotNumber: 222),
-        CarSpot(spotOpen: false,spotNumber: 39),
-        CarSpot(spotOpen: false,spotNumber: 40)
+        CarSpot(spotOpen: false,spotNumber: 1),
+        CarSpot(spotOpen: false,spotNumber: 2),
+        CarSpot(spotOpen: true,spotNumber: 3),
+        CarSpot(spotOpen: false,spotNumber: 4),
+        CarSpot(spotOpen: false,spotNumber: 5),
+        CarSpot(spotOpen: true,spotNumber: 6),
+        CarSpot(spotOpen: false,spotNumber: 7),
+        CarSpot(spotOpen: false,spotNumber: 8),
+        CarSpot(spotOpen: false,spotNumber: 9),
+        CarSpot(spotOpen: false,spotNumber: 10),
+        CarSpot(spotOpen: true,spotNumber: 11),
+        CarSpot(spotOpen: false,spotNumber: 12),
+        CarSpot(spotOpen: false,spotNumber: 13),
+        CarSpot(spotOpen: true,spotNumber: 14),
+        CarSpot(spotOpen: false,spotNumber: 15),
+        CarSpot(spotOpen: false,spotNumber: 16)
     ]
     var northernLot : [CarSpot] =
     [
-        CarSpot(spotOpen: false,spotNumber: 80),
-        CarSpot(spotOpen: true,spotNumber: 81),
-        CarSpot(spotOpen: false,spotNumber: 82)
+        CarSpot(spotOpen: false,spotNumber: 1),
+        CarSpot(spotOpen: true,spotNumber: 2),
+        CarSpot(spotOpen: false,spotNumber: 3),
+        CarSpot(spotOpen: false,spotNumber: 4),
+        CarSpot(spotOpen: true,spotNumber: 5),
+        CarSpot(spotOpen: true,spotNumber: 6),
+        CarSpot(spotOpen: false,spotNumber: 7),
+        CarSpot(spotOpen: true,spotNumber: 8),
+        CarSpot(spotOpen: true,spotNumber: 9),
+        CarSpot(spotOpen: true,spotNumber: 10),
+        CarSpot(spotOpen: false,spotNumber: 11)
     ]
     var recLot : [CarSpot] =
     [
+        CarSpot(spotOpen: false,spotNumber: 1),
+        CarSpot(spotOpen: true,spotNumber: 2),
+        CarSpot(spotOpen: false,spotNumber: 3),
+        CarSpot(spotOpen: false,spotNumber: 4),
+        CarSpot(spotOpen: false,spotNumber: 5),
+        CarSpot(spotOpen: false,spotNumber: 6),
+        CarSpot(spotOpen: false,spotNumber: 7),
+        CarSpot(spotOpen: false,spotNumber: 8),
+        CarSpot(spotOpen: true,spotNumber: 9),
         CarSpot(spotOpen: false,spotNumber: 10),
-        CarSpot(spotOpen: true,spotNumber: 55),
-        CarSpot(spotOpen: false,spotNumber: 44)
+        CarSpot(spotOpen: false,spotNumber: 11)
     ]
     var arenaLot : [CarSpot] =
     [
-        CarSpot(spotOpen: true,spotNumber: 19),
-        CarSpot(spotOpen: true,spotNumber: 30),
-        CarSpot(spotOpen: false,spotNumber: 35)
+        CarSpot(spotOpen: true,spotNumber: 1),
+        CarSpot(spotOpen: true,spotNumber: 2),
+        CarSpot(spotOpen: false,spotNumber: 3),
+        CarSpot(spotOpen: false,spotNumber: 4),
+        CarSpot(spotOpen: true,spotNumber: 5),
+        CarSpot(spotOpen: false,spotNumber: 6),
+        CarSpot(spotOpen: false,spotNumber: 7),
+        CarSpot(spotOpen: true,spotNumber: 8),
+        CarSpot(spotOpen: false,spotNumber: 9),
+        CarSpot(spotOpen: false,spotNumber: 10)
     ]
 }
 
