@@ -2,6 +2,10 @@
 #                   Parkwise Senior Design Project, Updated 2/28/23                      #
 ##########################################################################################
 
+##########################################################################################
+#                   Parkwise Senior Design Project, Updated 2/10/23                      #
+##########################################################################################
+
 
 # Imports
 import numpy as np
@@ -13,10 +17,9 @@ from datetime import datetime
 import numpy as np
 from mss import mss
 
-
 bounding_box = {'top': 400, 'left': 185, 'width': 1750, 'height': 1000}
 sct = mss()
-
+i = 0
 #Video feed selection
 
 cap = cv.VideoCapture(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\PullingOutVideo.MOV')
@@ -32,6 +35,21 @@ firebase_admin.initialize_app(cred, {
     })
 
 def changeImage(frame):
+
+    #Attempting to fix Unbound Local Error Fix by declaring spot values before use
+    Spot1Status = None
+    Spot2Status = None
+    Spot3Status = None
+    Spot4Status = None
+    Spot5Status = None
+    Spot6Status = None
+    Spot7Status = None
+    Spot8Status = None
+    Spot9Status = None
+    Spot10Status = None
+    Spot11Status = None
+    Spot12Status = None
+
 # Attempting to change the original image before being cropped and then croppping that
 # Median 61, thresh 21,1
     imgGray2 = cv.cvtColor(frame,cv.COLOR_BGRA2GRAY)
@@ -234,8 +252,18 @@ def changeImage(frame):
     count11 = cv.countNonZero(newImage11)
     count12 = cv.countNonZero(newImage12)
 
-    print('Count 4 is',count5)
-  
+    print('Count 1 is',count1)
+    print('Count 2 is',count2)
+    print('Count 3 is',count3)
+    print('Count 4 is',count4)
+    print('Count 5 is',count5)
+    print('Count 6 is',count6)
+    print('Count 7 is',count7)
+    print('Count 8 is',count8)
+    print('Count 9 is',count9)
+    print('Count 10 is',count10)
+    print('Count 11 is',count11)
+    print('Count 12 is',count12)
     
 
     #Image detection threshold control
@@ -335,7 +363,6 @@ def changeImage(frame):
     if (count12<=40):
         Spot12Status = False
         cv.putText(frame, 'Open', (1414,895),cv.FONT_HERSHEY_COMPLEX,1,(0,255,0),2,cv.LINE_AA)
-    
     print (Spot5Status) 
     return frame, Spot1Status , Spot2Status, Spot3Status,Spot4Status,Spot5Status,Spot6Status,Spot7Status,Spot8Status,Spot9Status,Spot10Status,Spot11Status,Spot12Status,newImage4
 
@@ -369,7 +396,9 @@ def UpdateServer(Spot1Status,Spot2Status,Spot3Status,Spot4Status,Spot5Status,Spo
     return current_time
 
 
+
 while(1):
+    i = i+1
     #frame = cv.resize(cv.imread(r'C:\Users\beaum\Desktop\Capstone2_Project_1\Images\model1.jpg',-1), (1280, 895))
     sct_img = sct.grab(bounding_box)
     videoimage = changeImage(np.array(sct_img))
