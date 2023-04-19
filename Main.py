@@ -2,10 +2,6 @@
 #                   Parkwise Senior Design Project, Updated 2/28/23                      #
 ##########################################################################################
 
-##########################################################################################
-#                   Parkwise Senior Design Project, Updated 2/10/23                      #
-##########################################################################################
-
 
 # Imports
 import numpy as np
@@ -17,14 +13,92 @@ from datetime import datetime
 import numpy as np
 from mss import mss
 
+# Initialize Variables
+ix,iy,sx,sy,lx,ly = -1,-1,-1,-1,-1,-1
+counter = 0
+def draw_lines(event, x, y, flags, param):
+    
+     #Declare global variables
+    global ix,iy,sx,sy,lx,ly, counter
+        
+    # if the left mouse button was clicked, record the starting
+    if event == cv.EVENT_LBUTTONDOWN:
+       
+    
+        # draw circle of 2px
+        cv.circle(img, (x, y), 3, (0, 0, 127), -1)
+
+        if ix != -1: # if ix and iy are not first points, then draw a line
+            cv.line(img, (ix, iy), (x, y), (0, 0, 127), 2, cv.LINE_AA)
+        else: # if ix and iy are first points, store as starting points
+            sx, sy = x, y
+        ix,iy = x, y 
+
+        ## Writing X coordinate for spot click into file
+        file = open('ModelParking.txt','a')
+
+        data = str(ix)+'\n'
+        file.write(data)
+        file.close
+        ## Writing Y coordinate for spot click into file
+        file = open('ModelParking.txt','a')
+
+        data = str(iy)+'\n'
+        file.write(data)
+        file.close
+        # Counter that counts how many clicks have taken place
+        counter = counter + 1
+        if(counter % 4 == 0) :
+         lx,ly = ix,iy
+         ix,iy = -1,-1
+
+        
+    elif event == cv.EVENT_RBUTTONDOWN:
+       # ix, iy = -1, -1 # reset ix and iy
+       # if flags == 33: # if alt key is pressed, create line between start and end points to create polygon
+            cv.line(img, (lx, ly), (sx, sy), (0, 0, 127), 2, cv.LINE_AA)
+             ## Writing X coordinate for spot click into file
+             
+# read image from path and add callback
+def testOfDrawLines():
+    #img= cv.resize(cv.imread(r'C:\Users\beaum\Desktop\Capstone2_Project_1\Images\model1.jpg',-1), (1280, 720))
+    cv.namedWindow('image') 
+    cv.setMouseCallback('image',draw_lines)
+    while(1):
+        temps = []
+        with open("ModelParking.txt", "r") as file:
+            for line in file:
+                values = line.split()
+                for value in values:
+                    temps.append(int(value))
+        print(type(temps))
+        print(type(temps[0]))
+        #for line in file.readlines():
+         #       temps.append(int(line))
+          #      file.close() 
+        print(len(temps))
+        cv.imshow('image',img)
+        k = cv.waitKey(1) & 0xFF
+        # press 'q' to exit
+        if (len(temps) >= 97):
+            print('All spots have been successfully mapped')
+            break
+        if k == ord('q'):
+            break
+    cv.destroyAllWindows()
+    print(type(temps[1]))
+    return temps
+
+
+print("1")
 bounding_box = {'top': 400, 'left': 185, 'width': 1750, 'height': 1000}
 sct = mss()
 i = 0
 #Video feed selection
 
-cap = cv.VideoCapture(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\PullingOutVideo.MOV')
+cap = cv.VideoCapture(r'C:\Users\beaum\Desktop\SeniorDesign-main\ParkingLotImages\PullingOutVideo.MOV')
 #cap = cv.VideoCapture(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\PullingInVideo.MOV')
-img = cv.imread(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\newest model 1.jpg')
+img = cv.imread(r'C:\Users\beaum\Desktop\SeniorDesign-main\ParkingLotImages\model1.jpg')
 #Global Variables
 frame_counter = 0
   #fetch the service account key JSON file contents 
@@ -60,11 +134,7 @@ def changeImage(frame):
     # Spot 1 filtered and cut out spot
     
     mask = np.zeros(imgMedian2.shape, dtype=np.uint8)
-    roi_corners = np.array([[(105,80), (320,80), (230,440),(105,430)]], dtype=np.int32)
-    cv.circle(frame,(105,80), 5, (0,0,255), -1)
-    cv.circle(frame,(320,80), 5, (0,0,255), -1)
-    cv.circle(frame,(320,440), 5, (0,0,255), -1)
-    cv.circle(frame,(105,430), 5, (0,0,255), -1)
+    roi_corners = np.array([[(1,80), (320,80), (230,440),(105,430)]], dtype=np.int32)
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
     cv.fillPoly(mask, roi_corners, ignore_mask_color)
@@ -75,10 +145,6 @@ def changeImage(frame):
     mask2 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners2 = np.array([[(420,80),(586,80),(590,452),(406,452)]], dtype=np.int32)
     
-    cv.circle(frame,(420,80), 5, (0,0,255), -1)
-    cv.circle(frame,(586,80), 5, (0,0,255), -1)
-    cv.circle(frame,(590,452), 5, (0,0,255), -1)
-    cv.circle(frame,(406,452), 5, (0,0,255), -1)
     #cv.circle(frame,(515,541), 5, (0,0,255), -1)
     
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
@@ -92,11 +158,6 @@ def changeImage(frame):
     mask3 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners3 = np.array([[(686,80),(831,80),(840,466),(658,452)]], dtype=np.int32)
     
-    cv.circle(frame,(686,80), 5, (0,0,255), -1)
-    cv.circle(frame,(831,80), 5, (0,0,255), -1)
-    cv.circle(frame,(840,466), 5, (0,0,255), -1)
-    cv.circle(frame,(658,452), 5, (0,0,255), -1)
-    
     #cv.circle(frame,(800,520), 5, (0,0,255), -1)
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
@@ -107,11 +168,6 @@ def changeImage(frame):
     
     mask4 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners4 = np.array([[(938,90),(1106,90),(1086,465),(938,465)]], dtype=np.int32)
-    
-    cv.circle(frame,(938,90), 5, (0,0,255), -1)
-    cv.circle(frame,(1106,90), 5, (0,0,255), -1)
-    cv.circle(frame,(1086,465), 5, (0,0,255), -1)
-    cv.circle(frame,(938,465), 5, (0,0,255), -1)
       
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
@@ -123,10 +179,6 @@ def changeImage(frame):
     mask5 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners5 = np.array([[(1210,90),(1340,90),(1330,465),(1190,465)]], dtype=np.int32)
 
-    cv.circle(frame,(1200,90), 5, (0,0,255), -1)
-    cv.circle(frame,(1350,90), 5, (0,0,255), -1)
-    cv.circle(frame,(1330,465), 5, (0,0,255), -1)
-    cv.circle(frame,(1190,465), 5, (0,0,255), -1)
     
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
@@ -138,10 +190,6 @@ def changeImage(frame):
     mask6 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners6 = np.array([[(1440,100),(1610,100),(1610,479),(1428,479)]], dtype=np.int32)
     
-    cv.circle(frame,(1440,100), 5, (0,0,255), -1)
-    cv.circle(frame,(1610,100), 5, (0,0,255), -1)
-    cv.circle(frame,(1610,479), 5, (0,0,255), -1)
-    cv.circle(frame,(1428,479), 5, (0,0,255), -1)
     
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
@@ -154,11 +202,6 @@ def changeImage(frame):
     mask7 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners7 = np.array([[(91,519),(322,519),(301,865),(77,865)]], dtype=np.int32)
     
-    cv.circle(frame,(91,519), 5, (0,0,255), -1)
-    cv.circle(frame,(322,519), 5, (0,0,255), -1)
-    cv.circle(frame,(301,865), 5, (0,0,255), -1)
-    cv.circle(frame,(77,865), 5, (0,0,255), -1)
-    
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
     cv.fillPoly(mask7, roi_corners7, ignore_mask_color)
@@ -168,11 +211,6 @@ def changeImage(frame):
     
     mask8 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners8 = np.array([[(399,519),(588,519),(560,865),(371,865)]], dtype=np.int32)
-    
-    cv.circle(frame,(399,519), 5, (0,0,255), -1)
-    cv.circle(frame,(588,519), 5, (0,0,255), -1)
-    cv.circle(frame,(560,865), 5, (0,0,255), -1)
-    cv.circle(frame,(371,865), 5, (0,0,255), -1)
     
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
@@ -184,11 +222,6 @@ def changeImage(frame):
     mask9 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners9 = np.array([[(665,532),(846,532),(837,865),(658,865)]], dtype=np.int32)
     
-    cv.circle(frame,(665,532), 5, (0,0,255), -1)
-    cv.circle(frame,(846,532), 5, (0,0,255), -1)
-    cv.circle(frame,(837,865), 5, (0,0,255), -1)
-    cv.circle(frame,(658,865), 5, (0,0,255), -1)
-    
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
     cv.fillPoly(mask9, roi_corners9, ignore_mask_color)
@@ -199,11 +232,6 @@ def changeImage(frame):
     mask10 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners10 = np.array([[(924,545),(1092,545),(1071,891),(910,891)]], dtype=np.int32)
     
-    cv.circle(frame,(924,545), 5, (0,0,255), -1)
-    cv.circle(frame,(1092,545), 5, (0,0,255), -1)
-    cv.circle(frame,(1071,891), 5, (0,0,255), -1)
-    cv.circle(frame,(910,891), 5, (0,0,255), -1)
-    
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
     cv.fillPoly(mask10, roi_corners10, ignore_mask_color)
@@ -213,12 +241,6 @@ def changeImage(frame):
     
     mask11 = np.zeros(imgMedian2.shape, dtype=np.uint8)
     roi_corners11 = np.array([[(1176,545),(1404,545),(1323,904),(1162,904)]], dtype=np.int32)
-    
-    cv.circle(frame,(1176,545), 5, (0,0,255), -1)
-    cv.circle(frame,(1404,545), 5, (0,0,255), -1)
-    cv.circle(frame,(1323,904), 5, (0,0,255), -1)
-    cv.circle(frame,(1162,904), 5, (0,0,255), -1)
-    
     channel_count = frame.shape[2]  # i.e. 3 or 4 depending on your image
     ignore_mask_color = (255,)*channel_count
     cv.fillPoly(mask11, roi_corners11, ignore_mask_color)
@@ -365,7 +387,7 @@ def changeImage(frame):
         cv.putText(frame, 'Open', (1414,895),cv.FONT_HERSHEY_COMPLEX,1,(0,255,0),2,cv.LINE_AA)
     print (Spot5Status) 
     return frame, Spot1Status , Spot2Status, Spot3Status,Spot4Status,Spot5Status,Spot6Status,Spot7Status,Spot8Status,Spot9Status,Spot10Status,Spot11Status,Spot12Status,newImage4
-
+print("2")
 def UpdateServer(Spot1Status,Spot2Status,Spot3Status,Spot4Status,Spot5Status,Spot6Status,Spot7Status,Spot8Status,Spot9Status,Spot10Status,Spot11Status,Spot12Status):
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
@@ -394,15 +416,28 @@ def UpdateServer(Spot1Status,Spot2Status,Spot3Status,Spot4Status,Spot5Status,Spo
 
     
     return current_time
+x = testOfDrawLines()
 
-
+cv.circle(img,(x[0],x[1]), 5, (0,0,255), -1)
+cv.circle(img,(x[2],x[3]), 5, (0,0,255), -1)
+cv.circle(img,(x[4],x[5]), 5, (0,0,255), -1)
+cv.circle(img,(x[6],x[7]), 5, (0,0,255), -1)
+cv.circle(img,(x[8],x[9]), 5, (0,0,255), -1)
+cv.circle(img,(x[10],x[11]), 5, (0,0,255), -1)
+cv.circle(img,(x[12],x[13]), 5, (0,0,255), -1)
+cv.circle(img,(x[14],x[15]), 5, (0,0,255), -1)
+cv.circle(img,(x[16],x[17]), 5, (0,0,255), -1)
+cv.circle(img,(x[18],x[19]), 5, (0,0,255), -1)
+cv.circle(img,(x[20],x[21]), 5, (0,0,255), -1)
+cv.circle(img,(x[22],x[23]), 5, (0,0,255), -1)
+cv.imshow('testimage',img)
 
 while(1):
+    print("4")
     i = i+1
     #frame = cv.resize(cv.imread(r'C:\Users\beaum\Desktop\Capstone2_Project_1\Images\model1.jpg',-1), (1280, 895))
     sct_img = sct.grab(bounding_box)
     videoimage = changeImage(np.array(sct_img))
-    cv.imshow('hello2',videoimage[13])
     cv.imshow('hello1',videoimage[0])
     #cv.imshow('hello',videoimage[0])
 
