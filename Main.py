@@ -15,13 +15,14 @@ from mss import mss
 import PySimpleGUI as sg
 
 # Initialize Variables
-bounding_box = {'top': 400, 'left': 185, 'width': 1750, 'height': 1000}
+bounding_box = {'top': 300, 'left': 220, 'width': 1200, 'height': 600}
 sct = mss()
 i = 0
 #Video feed selection
 cap = cv.VideoCapture(r'C:\Users\beaum\Desktop\SeniorDesign-main\ParkingLotImages\PullingOutVideo.MOV')
 #cap = cv.VideoCapture(r'C:\Users\beaum\OneDrive\Desktop\Capstone2_Project_1\Images\PullingInVideo.MOV')
-img = cv.imread(r'C:\Users\beaum\OneDrive\Desktop\SeniorDesign-main\ParkingLotImages\model1.jpg')
+sct_img = sct.grab(bounding_box)
+newimg = (np.array(sct_img))
 #Global Variables
 frame_counter = 0
 #fetch the service account key JSON file contents 
@@ -45,10 +46,10 @@ def draw_lines(event, x, y, flags, param):
        
     
         # draw circle of 2px
-        cv.circle(img, (x, y), 3, (0, 0, 127), -1)
+        cv.circle(newimg, (x, y), 3, (0, 0, 127), -1)
 
         if ix != -1: # if ix and iy are not first points, then draw a line
-            cv.line(img, (ix, iy), (x, y), (0, 0, 127), 2, cv.LINE_AA)
+            cv.line(newimg, (ix, iy), (x, y), (0, 0, 127), 2, cv.LINE_AA)
         else: # if ix and iy are first points, store as starting points
             sx, sy = x, y
         ix,iy = x, y 
@@ -75,7 +76,7 @@ def draw_lines(event, x, y, flags, param):
     elif event == cv.EVENT_RBUTTONDOWN:
        # ix, iy = -1, -1 # reset ix and iy
        # if flags == 33: # if alt key is pressed, create line between start and end points to create polygon
-            cv.line(img, (lx, ly), (sx, sy), (0, 0, 127), 2, cv.LINE_AA)
+            cv.line(newimg, (lx, ly), (sx, sy), (0, 0, 127), 2, cv.LINE_AA)
              ## Writing X coordinate for spot click into file
 
 def changefitersettings():
@@ -166,7 +167,7 @@ def Settings():
         elif event == 'Refresh Pixel Counts':
             sct_img = sct.grab(bounding_box)
             getcountvalues = changeImage(x,np.array(sct_img))
-            table_data_main_menu1 = [getcountvalues[13],getcountvalues[14],getcountvalues[15],getcountvalues[16],getcountvalues[17],getcountvalues[18]], [getcountvalues[19],getcountvalues[20],getcountvalues[21],getcountvalues[22],getcountvalues[23],getcountvalues[23]]
+            table_data_main_menu1 = [getcountvalues[13],getcountvalues[14],getcountvalues[15],getcountvalues[16],getcountvalues[17],getcountvalues[18]], [getcountvalues[19],getcountvalues[20],getcountvalues[21],getcountvalues[22],getcountvalues[23],getcountvalues[24]]
             settingswindow['Table1'].update(values =table_data_main_menu1)
         elif event == 'Remap Spot Locations':
             open('ModelParking.txt','w').close()
@@ -174,7 +175,7 @@ def Settings():
         elif event == 'View Current Detection Coordinates':
             sct_img = sct.grab(bounding_box)
             getcountvalues = changeImage(x,np.array(sct_img))
-            resized_frame_settings = cv.resize(getcountvalues[24],(1200,500))
+            resized_frame_settings = cv.resize(getcountvalues[25],(1200,500))
             imgbytes_settings = cv.imencode('.png',resized_frame_settings)[1].tobytes()
             settingswindow['image1'].update(data =imgbytes_settings)
            
@@ -196,7 +197,7 @@ def testOfDrawLines():
          #       temps.append(int(line))
           #      file.close() 
         print(len(temps))
-        cv.imshow('image',img)
+        cv.imshow('image',newimg)
         k = cv.waitKey(1) & 0xFF
         # press 'q' to exit
         if (len(temps) >= 96):
@@ -232,8 +233,8 @@ def changeImage(x,frame):
 # Median 61, thresh 21,1
     imgGray2 = cv.cvtColor(frame,cv.COLOR_BGRA2GRAY)
     imgBlur2 = cv.GaussianBlur(imgGray2,(3,5),5)
-    imgThreshold2 = cv.adaptiveThreshold(imgBlur2,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,cv.THRESH_BINARY_INV,5,1)
-    imgMedian2 = cv.medianBlur(imgThreshold2,15)
+    imgThreshold2 = cv.adaptiveThreshold(imgBlur2,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,cv.THRESH_BINARY_INV,17,1)
+    imgMedian2 = cv.medianBlur(imgThreshold2,55)
 
     # Spot 1 filtered and cut out spot
     
@@ -408,68 +409,68 @@ def changeImage(x,frame):
     #Image detection threshold control
 
     #Spot 1
-    if (count1>=24):
+    if (count1>=2000):
         Spot1Status = True
-    if (count1<=23):
+    if (count1<2000):
         Spot1Status = False
     #Spot 2
-    if (count2>=41):
+    if (count2>=2000):
         Spot2Status = True
-    if (count2<=40):
+    if (count2<2000):
         Spot2Status = False
 
     #Spot 3
-    if (count3>=41):
+    if (count3>=2000):
         Spot3Status = True
-    if (count3<=40):
+    if (count3<2000):
         Spot3Status = False
     #Spot 4
-    if (count4>=41):
+    if (count4>=2000):
         Spot4Status = True
-    if (count4<=40):
+    if (count4<2000):
         Spot4Status = False
     #Spot 5
-    if (count5>=320):
+    if (count5>=2800):
         Spot5Status = True
-    if (count5<=319):
+    if (count5<2800):
         Spot5Status = False
     #Spot 6
-    if (count6>=320):
+    if (count6>=2000):
         Spot6Status = True
-    if (count6<=319):
+    if (count6<2000):
         Spot6Status = False
     #Spot 7
-    if (count7>=71):
+    if (count7>=2000):
         Spot7Status = True
-    if (count7<=70):
+    if (count7<2000):
         Spot7Status = False
     #Spot 8
-    if (count8>=41):
+    if (count8>=2000):
         Spot8Status = True
-    if (count8<=40):
+    if (count8<2000):
         Spot8Status = False
     #Spot 9
-    if (count9>41):
+    if (count9>=2000):
         Spot9Status = True
-    if (count9<=40):
+    if (count9<2000):
         Spot9Status = False
     #Spot 10
-    if (count10>=41):
+    if (count10>=2000):
         Spot10Status = True
-    if (count10<=40):
+    if (count10<2000):
         Spot10Status = False
     #Spot 11
-    if (count11>=41):
+    if (count11>=2000):
         Spot11Status = True
-    if (count11<=40):
+    if (count11<2000):
         Spot11Status = False
     #Spot 12
-    if (count12>=41):
+    if (count12>=2000):
         Spot12Status = True
-    if (count12<=40):
+    if (count12<2000):
         Spot12Status = False
     
-    return frame, Spot1Status , Spot2Status, Spot3Status,Spot4Status,Spot5Status,Spot6Status,Spot7Status,Spot8Status,Spot9Status,Spot10Status,Spot11Status,Spot12Status,count1,count2,count3,count4,count5,count7,count8,count9,count10,count11,count12,frame_with_mapped_spots,imgMedian2
+    return frame, Spot1Status , Spot2Status, Spot3Status,Spot4Status,Spot5Status,Spot6Status,Spot7Status,Spot8Status,Spot9Status,Spot10Status,Spot11Status,Spot12Status,count1,count2,count3,count4,count5,count6,count7,count8,count9,count10,count11,count12,frame_with_mapped_spots,imgMedian2
 def UpdateServer(Spot1Status,Spot2Status,Spot3Status,Spot4Status,Spot5Status,Spot6Status,Spot7Status,Spot8Status,Spot9Status,Spot10Status,Spot11Status,Spot12Status):
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
